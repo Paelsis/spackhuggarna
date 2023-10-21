@@ -3,7 +3,6 @@ import moment from 'moment-with-locales-es6'
 import findStaticStyle from './findStaticStyle'
 import {serverFetchDataResult} from './serverFetch'
 import {replaceChar} from '../services/functions'
-import casaBlanca from '../images/VitaHuset.jpg';
 
 
 const CULTURE = (language) => language===LANGUAGE_SV?'sv':language===LANGUAGE_ES?'es':'en'

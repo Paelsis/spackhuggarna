@@ -4,7 +4,6 @@ import  {Component } from 'react'
 import FormTemplate from '../components/FormTemplate';
 import Button from '@mui/material/Button';
 import moment from 'moment-with-locales-es6'
-import { textAlign } from '@mui/system';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';

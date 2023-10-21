@@ -1,6 +1,9 @@
 import React, { createContext, useState, useContext } from 'react';
 
 const initialState = {
+    name:'No name',  
+    region:'Skåne',
+    city:'Malmö',
     color:'white',
     backgroundColorLight:'grey',
     backgroundColorDark:'black',

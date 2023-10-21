@@ -1,4 +1,3 @@
-import casaBlanca from '../images/VitaHuset.jpg';
 
 export const AVA_STATUS = {
     AV:'AV', // Avaiable space
@@ -52,9 +51,6 @@ export const COLORS = {
   LIGHTBLUE:'lightBlue'
 }
 
-export const backgroundImages = {
-  casaBlanca:`url(${casaBlanca})`
-}  
 
 export const BUTTON_STYLE = {
   DEFAULT:{color:'black', borderColor:'black'},

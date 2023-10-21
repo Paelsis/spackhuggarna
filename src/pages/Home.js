@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { useSharedState} from '../store';
-import Image from '../images/tangosweden.jpg';
+import Image from '../images/spackhuggarna.jpg';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import {serverFetchData} from '../services/serverFetch'
@@ -78,47 +78,33 @@ const styles = {
 
 const Home = () => {
     const [userSettings] = useSharedState()
-    const [list, setList] = useState([])
-    const [cities, setCities] = useState([])
-    const [regions, setRegions] = useState([])
     const navigate = useNavigate()
     const handleNavigate = lnk => {
         navigate(lnk)
     }
-    useEffect(()=>{
-        const irl = '/getCalendarNames'
-        serverFetchData(irl, '', '', reply=>{setCities(reply.cities); setRegions(reply.regions)})
-    }, [])
     return(
         <div style={styles.container}>
-            <img style={styles.img} src={Image} onClick={()=>handleNavigate('/calendar/skåne')}/>
-            <div style={styles.buttonContainer}>
-                <p/>
-                {regions.map(it=>
-                    <Button variant="outlined" type="button" style={styles.buttonRegion}  onClick={()=>handleNavigate('/calendar/' + it.region)}>
-                        {it.region}                    
-                    </Button>    
-                )}    
-                <Button variant="outlined" type="button" style={styles.button}  onClick={()=>handleNavigate('/calendar/malmö')}>
-                    Malmö/Lund                    
-                </Button>    
-                {cities.filter(it => !it.city.toLowerCase().includes('malmö')).map(it=>
-                    <Button variant="outlined" type="button" style={styles.button}  onClick={()=>handleNavigate('/calendar/' + it.city)}>
-                        {it.city}                    
-                    </Button>    
-                )}    
-                <div style={{height:15}}/>
-                <h4>External Calendars</h4>
-                <Button variant="outlined" type="button" style={styles.buttonDenmark}  onClick={()=>handleNavigate('/denmark')}>
-                    Danmark                    
-                </Button>    
-                <Button variant="outlined" type="button" style={styles.button}  onClick={()=>handleNavigate('/halmstad')}>
-                    Halmstad                    
-                </Button>    
-                <Button variant="outlined" type="button" style={styles.button}  onClick={()=>handleNavigate('/gothenburg')}>
-                    Göteborg                    
-                </Button>    
-             </div>
+            {userSettings.email?
+                <>
+                    <img style={styles.img} src={Image} onClick={()=>handleNavigate('/calendar/skåne')}/>
+                    {userSettings.email?
+                        <div style={styles.buttonContainer}>
+                            <p/>
+                            <Button variant="outlined" type="button" style={styles.button}  onClick={()=>handleNavigate('/bilder')}>
+                                Bilder                    
+                            </Button>    
+                            <Button variant="outlined" type="button" style={styles.button}  onClick={()=>handleNavigate('/pdf')}>
+                                Pdf filer
+                            </Button>    
+                            <Button variant="outlined" type="button" style={styles.button}  onClick={()=>handleNavigate('/kamera')}>
+                                Kamera
+                            </Button>    
+                        </div>
+                    :null}    
+                </>    
+            :
+                <h1>No access</h1>
+            }
         </div>
     )
 }

@@ -2,7 +2,7 @@ import React, {useContext} from "react"
 import { getAuth, signOut, onAuthStateChanged} from 'firebase/auth';
 import {Redirect} from "react-router"
 import {AuthContext} from "login/FirebaseAuth"
-import Button from '@material-ui/core/Button';
+import Button from '@mui/Button';
 import tkColors from 'Settings/tkColors'
 
 

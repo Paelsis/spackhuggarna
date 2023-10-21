@@ -4,9 +4,9 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/MoreVert';
+import IconButton from '@mui/material/IconButton';
+
 import HomeIcon from '@mui/icons-material/Home';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -19,8 +19,6 @@ import {serverFetchDataResult} from '../services/serverFetch'
 // AppBar.js
 export default () => {
   const [userSettings, setUserSettings] = useSharedState()
-  const [email, setEmail] = useState(undefined)
-  //const [userSettings, setUserSettings] = useGlobalState('USER_SETTINGS')
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate()
@@ -31,23 +29,14 @@ export default () => {
   const handleClose = e => {
     setAnchorEl(null);
   };
-
-  const handleResult = result => {
-    //alert('AppBar 0:' + JSON.stringify(result?result:'No result'))
-    if (result && !!result.region) {
-      setUserSettings({...userSettings, ...result})
-    } else {
-      navigate('/settings')
-    }
-  }
   
   useEffect(()=>{
     onAuthStateChanged(auth, user => {
-      setEmail(user?user.email:undefined);
-      if (user.email) {
-        const irl = '/getUser?email=' +  user.email
-        serverFetchDataResult(irl, '', '', result=>handleResult(result))
-      } 
+      if (user !== null) {
+        setUserSettings({...(userSettings?userSettings:{}), email:user.email});
+      } else {
+        navigate('/signin')
+      }
     })
   }, [])
 
@@ -56,7 +45,7 @@ export default () => {
   }
 
   const handleSignout = () => {
-    setEmail(undefined)
+    setUserSettings({...userSettings, email:undefined})
     signOut(auth)
     window.location.reload()
     navigate('/signin')
@@ -77,14 +66,11 @@ export default () => {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={()=>handleNavigate('/calendars')}>Alla kalendrar</MenuItem>
-        <Divider />
         <MenuItem><ListItemText inset></ListItemText></MenuItem>
-        {email?<MenuItem onClick={()=>handleSignout()}>Signout</MenuItem>
-        :<MenuItem onClick={()=>handleSignin()}>Signin</MenuItem>}
-        {email?<MenuItem onClick={()=>navigate('/settings')}>Settings</MenuItem>:null}
-        {email?<MenuItem onClick={()=>navigate('/add')}>Add Event</MenuItem>:null}
-        {(email&& (userSettings?userSettings.authLevel >=8:false))?<MenuItem onClick={()=>navigate('/setupUser')}>Setup users</MenuItem>:null}
+        {userSettings?userSettings.email?<MenuItem onClick={()=>handleSignout()}>Signout</MenuItem>
+        :<MenuItem onClick={()=>handleSignin()}>Signin</MenuItem>:null}
+        {userSettings?userSettings.email?<MenuItem onClick={()=>navigate('/settings')}>Settings</MenuItem>:null:null}
+        {userSettings?userSettings.email?<MenuItem onClick={()=>navigate('/add')}>Add Event</MenuItem>:null:null}
         <MenuItem onClick={()=>handleNavigate('/usage')}>Usage</MenuItem>
       </Menu>
 
@@ -97,19 +83,19 @@ export default () => {
               color="inherit"
               aria-label="menu"
               sx={{ mr: 0 }}
-            >
+              onClick={()=>handleNavigate('/home')}
+              >
               <HomeIcon 
                     id="basic-button"
                     aria-controls={open ? 'basic-menu' : undefined}
                     aria-haspopup="true"
                     aria-expanded={open ? 'true' : undefined}
-                    onClick={()=>handleNavigate('/home')}
               />
             </IconButton>
             <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}  onClick={()=>handleNavigate('/home')}>
             </Typography>
             <Typography variant="h8" component="div" sx={{ flexGrow: 4 }}  onClick={()=>handleNavigate('/home')}>
-              {email?'Signed in ' + (userSettings.city?userSettings.city:'') + ' ' +  (userSettings.region?userSettings.region:'') + ' ' + (email?email:null):null}
+              {userSettings?userSettings.email?'Signed in ' + (userSettings.email?userSettings.email:null):null:null}
             </Typography>
             <IconButton
               size="large"

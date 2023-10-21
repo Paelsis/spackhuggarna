@@ -1,12 +1,11 @@
 import React, {useEffect, useRef, useState} from "react"
+import { useNavigate } from "react-router-dom";
 import { useSharedState } from '../store';
-import { Navigate, useNavigate } from 'react-router-dom'
 import firebaseApp from '../services/firebaseApp'
 import { getAuth, onAuthStateChanged} from 'firebase/auth'
 import FormTemplate from '../components/FormTemplate'
 import SelectSettings from '../components/SelectSettings'
 import {serverFetchDataResult} from '../services/serverFetch'
-import Add from '../components/AddEvent'
 import serverPost from "../services/serverPost"
 import Square from "../components/Square"
 
@@ -142,14 +141,16 @@ const BUTTON_STYLE = {
 
 // Settings.js
 export default props => {
+
     const [email, setEmail] = useState(undefined)
     const [userSettings, setUserSettings] = useSharedState()
     const [buttonStyle, setButtonStyle] = useState(BUTTON_STYLE.DEFAULT)
     const auth = getAuth()
+    const navigate = useNavigate()
 
     const handleResult = reply => {
       // alert('Settings:' + JSON.stringify(reply.result?reply.result:'No result'))
-      if (reply.status === 'OK' && !!reply.result) {
+      if (reply && (reply.status === 'OK' && !!reply.result)) {
           setUserSettings({...userSettings, ...reply.result})
       } 
     }

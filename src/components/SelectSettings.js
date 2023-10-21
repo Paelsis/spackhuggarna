@@ -1,13 +1,7 @@
 import React, {useEffect, useRef, useState} from "react"
-import { useSharedState } from '../store';
-import { Navigate, useNavigate } from 'react-router-dom'
 import firebaseApp from '../services/firebaseApp'
 import { getAuth, onAuthStateChanged} from 'firebase/auth'
-import FormTemplate from '../components/FormTemplate'
 import {serverFetchDataResult} from '../services/serverFetch'
-import Add from '../components/AddEvent'
-import serverPost from "../services/serverPost"
-import Square from "../components/Square"
 import { ADMINISTRATORS } from "../services/const";
 
 export default ({email, userSettings, setUserSettings}) => {
